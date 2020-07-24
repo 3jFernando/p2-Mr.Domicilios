@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -46,42 +46,42 @@ export default function DetailsComponentComponent(props) {
               <TouchableOpacity style={styles.categoryItem}>
                 <Image
                   style={styles.imageCategory}
-                  source={require('../../assets/images/categorys_shops/2.png')}
+                  source={require('../../assets/images/delivery.jpeg')}
                 />
                 <Text>Hamburguesas</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.categoryItem}>
                 <Image
                   style={styles.imageCategory}
-                  source={require('../../assets/images/categorys_shops/2.png')}
+                  source={require('../../assets/images/delivery.jpeg')}
                 />
                 <Text>Empanadas</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.categoryItem}>
                 <Image
                   style={styles.imageCategory}
-                  source={require('../../assets/images/categorys_shops/2.png')}
+                  source={require('../../assets/images/delivery.jpeg')}
                 />
                 <Text>Desayunos</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.categoryItem}>
                 <Image
                   style={styles.imageCategory}
-                  source={require('../../assets/images/categorys_shops/2.png')}
+                  source={require('../../assets/images/delivery.jpeg')}
                 />
                 <Text>Cafes</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.categoryItem}>
                 <Image
                   style={styles.imageCategory}
-                  source={require('../../assets/images/categorys_shops/2.png')}
+                  source={require('../../assets/images/delivery.jpeg')}
                 />
                 <Text>Jugos</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.categoryItem}>
                 <Image
                   style={styles.imageCategory}
-                  source={require('../../assets/images/categorys_shops/2.png')}
+                  source={require('../../assets/images/delivery.jpeg')}
                 />
                 <Text>Ropa</Text>
               </TouchableOpacity>
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 66,
     marginBottom: 15,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: '#FFFFFF',
     padding: 15,
     borderRadius: 6,
   },

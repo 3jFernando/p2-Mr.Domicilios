@@ -6,7 +6,6 @@ import {
   ScrollView,
   Image,
   Text,
-  TextInput,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -17,6 +16,7 @@ import SearchComponent from '../SearchComponent';
 import CATEGORYS from '../utils/categorys_shops.json';
 import TabsComponent from './TabsComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import {URL} from '../utils/api-url';
 
 export default class HomeComponent extends Component {
   constructor(props) {
@@ -45,7 +45,7 @@ export default class HomeComponent extends Component {
                     }>
                     <Image
                       style={styles.contentCategoryImage}
-                      source={require('../../assets/images/categorys_shops/2.png')}
+                      source={{uri: `${URL}${category.image}`}}
                     />
                     <Text style={styles.contentCategoryTitle}>
                       {category.name}
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'white',
     padding: 1,
     borderRadius: 10,
   },
@@ -120,19 +120,19 @@ const styles = StyleSheet.create({
     width: 90,
   },
   contentCategoryImage: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
   },
   contentCategoryTitle: {
     marginTop: 4,
   },
   seeMoreCategoys: {
-    margin: 12,
+    marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#29d45d',
     padding: 4,
-    borderRadius: 3,
+    borderRadius: 10,
     paddingLeft: 20,
     paddingRight: 20,
   },

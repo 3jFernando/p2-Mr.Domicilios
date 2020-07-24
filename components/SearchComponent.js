@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet, TextInput, View, Image} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function SearchComponent() {
   return (
     <View style={styles.contentSearch}>
-      <TextInput style={styles.searchInput} placeholder="Buscar.,," />
+      <TextInput style={styles.searchInput} placeholder="Buscar..." />
       <FontAwesome5Icon name={'search'} style={styles.searchIcon} />
     </View>
   );

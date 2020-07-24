@@ -5,9 +5,9 @@ import {
   Text,
   Image,
   ScrollView,
-  View,
   TouchableOpacity,
 } from 'react-native';
+import {URL} from '../utils/api-url';
 
 import CATEGORYS from '../utils/categorys_shops.json';
 
@@ -33,7 +33,7 @@ export default function AllComponent(props) {
             }>
             <Image
               style={styles.itemImage}
-              source={require('../../assets/images/categorys_shops/2.png')}
+              source={{uri: `${URL}${category.image}`}}
             />
             <Text style={styles.itemTitle}>{category.name}</Text>
           </TouchableOpacity>
@@ -47,14 +47,12 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     backgroundColor: 'white',
+    padding: 20,
   },
   contentItems: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginRight: 10,
-    marginLeft: 10,
-    marginBottom: 10,
-    marginTop: 10,
+    margin: 10,
     alignItems: 'center',
   },
   itemImage: {

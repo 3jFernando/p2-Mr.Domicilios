@@ -5,9 +5,9 @@ import {
   StyleSheet,
   Image,
   SectionList,
-  TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import FORMAT_CURRENCEY from '../utils/format_cash';
@@ -16,9 +16,12 @@ import FORMAT_CURRENCEY from '../utils/format_cash';
 import ProductComponent from '../products/ProductComponent';
 
 import {URL_API} from '../utils/api-url';
+import Axios from 'axios';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function DetailsComponent(props) {
   const {shop} = props.route.params;
+  const [client, setClient] = useState({_id: null});
 
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -26,113 +29,84 @@ export default function DetailsComponent(props) {
 
   // cargar productos de la tienda
   useEffect(() => {
-    fetch(
-      URL_API+'/products/shop/by-cateogory/' + shop._id,
-    )
-      .then(response => response.json())
-      .then(json => {
-        setProducts(json.products);
-        setCantProducts(json.cant);
-      })
-      .catch(e => alert('No es posible cargar los datos en este momento'))
-      .finally(() => setLoading(false));
-  }, [shop._id]);
-
-  // agregar producto al carrito de compras
-  async function addToCart(product) {
-    const cart = await AsyncStorage.getItem('cart-shop');
-
-    // validar si el carrito esta con productos
-    let _products = [];
-    if (cart !== null) {
-      _products = JSON.parse(cart);
-    }
-
-    // validar si ya existe solo se aumenta la cantidad
-    let exist = false;
-    _products.map((p, index) => {
-      if (p._id === product._id) {
-        _products[index].cant_shop += 1;
-        // calcular total
-        _products[index].total = parseFloat(
-          _products[index].cant_shop * parseFloat(_products[index].price),
-        );
-        exist = true;
+    const validSession = async () => {
+      const clientSession = await AsyncStorage.getItem('client-session');
+      if (clientSession !== null) {
+        setClient(JSON.parse(clientSession));
+        await Axios.get(
+          URL_API +
+            '/products/shop/by-cateogory/' +
+            shop._id +
+            '/' +
+            client._id,
+        )
+          .then(response => {
+            setProducts(response.data.products);
+            setCantProducts(response.data.cant);
+          })
+          .catch(e => alert('No es posible cargar los datos en este momento'))
+          .finally(() => setLoading(false));
       }
-    });
-
-    // agregar si no existe con cntidad en 1
-    if (!exist) {
-      product.shop = shop;
-      product.cant_shop = 1;
-      product.total = product.price;
-      _products.push(product);
-    }
-
-    // actualizar storage
-    await AsyncStorage.setItem('cart-shop', JSON.stringify(_products));
-  }
+    };
+    validSession();
+  }, [client._id, shop._id]);
 
   return (
-    <View style={styles.content}>
-      <View style={{flex: 1}}>
-        <View style={styles.main}>
-          <View style={styles.header}>
-            <Image
-              style={styles.photo}
-              source={require('../../assets/images/more3.jpg')}
-            />
-            <Text style={styles.name}>{shop.name} </Text>
-          </View>
-        </View>
-        <View style={{padding: 10, alignItems: 'center'}}>
-          <Text style={{fontWeight: 'bold'}}>
-            Entrega aprox: {shop.time_number}-{shop.time_type}
-          </Text>
-          <Text style={{fontWeight: 'bold'}}>
-            Valor domicilio: {FORMAT_CURRENCEY(shop.value_delivery)}
-          </Text>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.main1}>
+        <Image
+          style={styles.imageBackground}
+          source={require('../../assets/images/more3.jpg')}
+        />
       </View>
-      <SafeAreaView style={styles.safeArea}>
-        {loading ? (
-          <View style={{alignItems: 'center', marginTop: 20}}>
-            <ActivityIndicator size="large" color="#000000" />
-          </View>
-        ) : cantProducts > 0 ? (
-          <SectionList
-            style={styles.list}
-            sections={products}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({item}) => (
-              <ProductComponent
-                item={item}
-                addToCart={addToCart}
-                navigation={props.navigation}
-              />
-            )}
-            renderSectionHeader={({section: {category}}) => (
-              <Text style={styles.headerItemList}>{category}</Text>
-            )}
-          />
-        ) : (
-          <View style={{alignItems: 'center', marginTop: 20}}>
-            <Text style={{color: 'orange', fontSize: 18, fontWeight: 'bold'}}>
-              La tienda no tiene porductos para mostrar.
-            </Text>
-          </View>
-        )}
-      </SafeAreaView>
+
+      <View style={styles.main2}>
+        <Image
+          style={styles.image}
+          source={require('../../assets/images/more3.jpg')}
+        />
+        <Text style={styles.name}>{shop.name}</Text>
+        <Text style={styles.description}>
+          Entrega aprox: {shop.time_number}-{shop.time_type}
+        </Text>
+        <Text style={styles.description}>
+          Valor domicilio: {FORMAT_CURRENCEY(shop.value_delivery)}
+        </Text>
+        <SafeAreaView style={styles.safeArea}>
+          {loading ? (
+            <View style={{alignItems: 'center', marginTop: 20}}>
+              <ActivityIndicator size="large" color="#000000" />
+            </View>
+          ) : cantProducts > 0 ? (
+            <SectionList
+              style={styles.list}
+              sections={products}
+              keyExtractor={(item, index) => item + index}
+              renderItem={({item}) => (
+                <ProductComponent
+                  item={item}
+                  navigation={props.navigation}
+                  shop={shop}
+                />
+              )}
+              renderSectionHeader={({section: {category}}) => (
+                <Text style={styles.headerItemList}>{category}</Text>
+              )}
+            />
+          ) : (
+            <View style={{alignItems: 'center', marginTop: 20}}>
+              <Text style={{color: 'orange', fontSize: 18, fontWeight: 'bold'}}>
+                La tienda no tiene porductos para mostrar.
+              </Text>
+            </View>
+          )}
+        </SafeAreaView>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    backgroundColor: 'white',
-    padding: 0,
-  },
   safeArea: {flex: 3, marginTop: 20, paddingBottom: 10},
   viewSectionList: {
     flexDirection: 'row',
@@ -140,23 +114,48 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  header: {
-    alignItems: 'center',
+  container: {
+    flex: 1,
+    position: 'relative',
+    backgroundColor: '#FFFFFF',
+  },
+  main1: {
+    flex: 0.7,
     backgroundColor: 'black',
-    padding: 5,
-    borderBottomStartRadius: 210,
-    height: 130,
+  },
+  imageBackground: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.4,
+  },
+  main2: {
+    flex: 2,
+    borderTopLeftRadius: 70,
+    backgroundColor: '#FFFFFF',
+    marginTop: -60,
+    paddingTop: 20,
   },
   name: {
-    fontSize: 20,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginLeft: 10,
-    color: 'white',
+    color: 'black',
+    marginLeft: 20,
+    marginTop: 10,
+    marginRight: 10,
   },
-  photo: {
-    width: 70,
-    borderRadius: 100,
-    height: 70,
+  description: {
+    color: 'gray',
+    fontSize: 15,
+    marginLeft: 20,
+    marginRight: 20,
+  },
+  image: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    right: 30,
+    top: -70,
+    borderRadius: 10,
   },
   list: {
     padding: 10,

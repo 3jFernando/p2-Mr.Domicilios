@@ -16,7 +16,7 @@ export default class FavoriteComponent extends Component {
             </View>
           </ScrollView>
         </SafeAreaView>
-        <TabsComponent active="2" navigation={this.props.navigation} />
+        <TabsComponent active="3" navigation={this.props.navigation} />
       </View>
     );
   }

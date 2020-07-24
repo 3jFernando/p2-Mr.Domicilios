@@ -186,7 +186,7 @@ export default function CreateComponent(props) {
               <TouchableOpacity key={shop._id} style={styles.shopsItem}>
                 <Image
                   style={styles.shopsImage}
-                  source={require('../../assets/images/1.jpeg')}
+                  source={require('../../assets/images/more3.jpg')}
                 />
                 <Text style={styles.shopsName}>{shop.name}</Text>
               </TouchableOpacity>

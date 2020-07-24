@@ -26,12 +26,12 @@ export default function LoginComponent(props) {
       }
     };
     validSession();
-  }, []);
+  }, [props.navigation]);
 
   async function login() {
     setTitleLogin('Ingresando ...');
     await axios
-      .post(URL_API+'/clients/login', {
+      .post('http://192.168.88.103:5000/api/clients/login', {
         email: email,
         password: password,
       })
@@ -39,7 +39,7 @@ export default function LoginComponent(props) {
         const res = response.data;
         const status = res.status;
         const message = res.message;
-        
+
         if (status === 460) {
           alert(message);
         } else if (status === 470) {
@@ -51,7 +51,8 @@ export default function LoginComponent(props) {
       })
       // error
       .catch(e => {
-        alert('Upps, ocurrio un error al tratar de realizar la accion.');          
+        console.log('e ', e);
+        alert('Upps, ocurrio un error al tratar de realizar la accion.');
       })
       .then(() => setTitleLogin('Iniciar sesion')); // terminado
   }
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#29d45d',
     height: 40,
     borderRadius: 30,
     marginHorizontal: 10,

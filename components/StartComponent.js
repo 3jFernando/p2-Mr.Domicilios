@@ -19,7 +19,7 @@ export default function StartComponent(props) {
       <View style={styles.contentLogo}>
         <Image
           style={styles.logo}
-          source={require('../assets/images/categorys_shops/2.png')}
+          source={require('../assets/images/delivery.jpeg')}
         />
       </View>
       <View style={styles.contentMain}>
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 250,
     height: 250,
-    borderRadius: 150,
   },
   contentMain: {
     flex: 2,
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#29d45d',
     height: 40,
     borderRadius: 30,
     marginHorizontal: 10,

@@ -10,13 +10,10 @@
 import 'react-native-gesture-handler';
 
 import React, {useState, useEffect} from 'react';
-import {
-  NavigationContainer,
-  useNavigation,
-  StackActions,
-} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {TouchableOpacity, Text, Alert} from 'react-native';
+//import notifee from '@notifee/react-native';
 
 // componentes
 import StartComponent from './components/StartComponent';
@@ -26,7 +23,7 @@ import HomeComponent from './components/tabs/HomeComponent';
 import MapComponent from './components/tabs/MapComponent';
 import PromsComponent from './components/tabs/PromsComponent';
 import OrdersComponent from './components/tabs/OrdersComponent';
-import FavoriteComponent from './components/tabs/FavoriteComponent';
+import FavoriteComponent from './components/tabs/favorites/FavoriteComponent';
 import AllComponent from './components/categorys_shops/AllComponent';
 import DetailsComponent from './components/categorys_shops/DetailsComponent';
 import ShopsDetailsComponent from './components/shops/DetailsComponent';
@@ -47,7 +44,6 @@ import {URL} from './components/utils/api-url';
 const Stack = createStackNavigator();
 
 export default function App(props) {
-
   useEffect(() => {
     const validSession = async () => {
       let client = await AsyncStorage.getItem('client-session');
@@ -58,7 +54,7 @@ export default function App(props) {
         // pendiente de ordenes - orden en camino
         socket.emit('order-on-the-way-connect', client._id);
         socket.on('order-on-the-way', (__connect, payload) => {
-          Alert.alert(
+          /*Alert.alert(
             'Orden en camino!',
             'Enhorabuena, tu orden ya esta en camino...',
             [
@@ -72,7 +68,8 @@ export default function App(props) {
               },
             ],
             {cancelable: false},
-          );
+          );*/
+          alert("Domicilio en camino");
         });
       }
     };
@@ -84,7 +81,7 @@ export default function App(props) {
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
-            backgroundColor: 'black',
+            backgroundColor: '#29d45d',
           },
           headerTintColor: 'white',
           headerTitleStyle: {
