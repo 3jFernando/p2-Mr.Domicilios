@@ -15,9 +15,8 @@ import FORMAT_CURRENCEY from '../utils/format_cash';
 // componentes
 import ProductComponent from '../products/ProductComponent';
 
-import {URL_API} from '../utils/api-url';
+import {URL_API, URL} from '../utils/api-url';
 import Axios from 'axios';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function DetailsComponent(props) {
   const {shop} = props.route.params;
@@ -56,14 +55,20 @@ export default function DetailsComponent(props) {
       <View style={styles.main1}>
         <Image
           style={styles.imageBackground}
-          source={require('../../assets/images/more3.jpg')}
+          source={
+            shop.photo === null || shop.photo === undefined
+              ? require('../../assets/images/delivery.jpeg')
+              : {uri: `${URL}${shop.photo}`}
+          }
         />
       </View>
 
       <View style={styles.main2}>
         <Image
           style={styles.image}
-          source={require('../../assets/images/more3.jpg')}
+          source={shop.photo === null || shop.photo === undefined
+            ? require('../../assets/images/delivery.jpeg')
+            : {uri: `${URL}${shop.photo}`}}
         />
         <Text style={styles.name}>{shop.name}</Text>
         <Text style={styles.description}>
@@ -163,7 +168,10 @@ const styles = StyleSheet.create({
   headerItemList: {
     fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 20,
-    marginTop: 20,
+    marginBottom: 10,
+    marginTop: 10,
+    backgroundColor: '#F8F8F8',
+    padding: 10,
+    borderRadius: 2,
   },
 });

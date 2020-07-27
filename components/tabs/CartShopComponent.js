@@ -12,6 +12,8 @@ import TabsComponent from './TabsComponent';
 import AsyncStorage from '@react-native-community/async-storage';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FORMAT_CURRENCEY from '../utils/format_cash';
+import {URL} from '../utils/api-url';
+import { showToast } from '../utils/toast-android';
 
 export default function CartShopComponent(props) {
   const [cartShop, setCartShop] = useState([]);
@@ -43,7 +45,11 @@ export default function CartShopComponent(props) {
 
     // tiedas
     await _data.map(item =>
-      shopsAll.push({name: item.shop.name, _id: item.shop._id}),
+      shopsAll.push({
+        name: item.shop.name,
+        _id: item.shop._id,
+        photo: item.shop.photo,
+      }),
     );
     shopsAll.map(shop => {
       // verificar si ya esta en la lista
@@ -134,7 +140,7 @@ export default function CartShopComponent(props) {
       await load();
     }
     if (!existItem) {
-      alert(
+      showToast(
         'El producto este presentado problemas, por favor retirelo de su carrito de compras.',
       );
     }
@@ -203,7 +209,11 @@ export default function CartShopComponent(props) {
                     }>
                     <Image
                       style={styles.itemImage}
-                      source={require('../../assets/images/more3.jpg')}
+                      source={
+                        item.image === null || item.image === ''
+                          ? require('../../assets/images/delivery.jpeg')
+                          : {uri: `${URL}${item.image}`}
+                      }
                     />
                   </TouchableOpacity>
                   <View style={{marginLeft: 10}}>
@@ -253,7 +263,13 @@ export default function CartShopComponent(props) {
                 <View style={styles.headerList}>
                   <Image
                     style={styles.imageHeader}
-                    source={require('../../assets/images/more3.jpg')}
+                    source={
+                      shop.photo === null ||
+                      shop.photo === undefined ||
+                      shop.photo === ''
+                        ? require('../../assets/images/delivery.jpeg')
+                        : {uri: `${URL}${shop.photo}`}
+                    }
                   />
                   <Text style={styles.headerItemList}>{shop.name}</Text>
                 </View>
@@ -332,7 +348,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   viewSectionList: {
-    flexDirection: 'row',    
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#F8F8F8',

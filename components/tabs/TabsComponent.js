@@ -5,6 +5,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 export default function TabsComponent(props) {
   const [activeMenu1, setActiveMenu1] = useState('#ccc');
+  const [activeMenu2, setActiveMenu2] = useState('#ccc');
   const [activeMenu3, setActiveMenu3] = useState('#ccc');
   const [activeMenu4, setActiveMenu4] = useState('#ccc');
   const [activeMenu5, setActiveMenu5] = useState('#ccc');
@@ -14,6 +15,8 @@ export default function TabsComponent(props) {
   useEffect(() => {
     if (menuActive == 1) {
       setActiveMenu1('#29d45d');
+    } else if (menuActive == 2) {
+      setActiveMenu2('#29d45d');
     } else if (menuActive == 3) {
       setActiveMenu3('#29d45d');
     } else if (menuActive == 4) {
@@ -31,6 +34,14 @@ export default function TabsComponent(props) {
         <FontAwesome5 name={'home'} size={20} color={activeMenu1} />
         <Text style={(styles.navFooterItemTitle, {color: activeMenu1})}>
           Home
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.navFooterItem}
+        onPress={() => props.navigation.navigate('Promotions')}>
+        <FontAwesome5 name={'truck-loading'} size={20} color={activeMenu2} />
+        <Text style={(styles.navFooterItemTitle, {color: activeMenu2})}>
+          Promos
         </Text>
       </TouchableOpacity>
       <TouchableOpacity

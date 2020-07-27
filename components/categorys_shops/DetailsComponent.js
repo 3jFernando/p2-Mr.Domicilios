@@ -13,7 +13,7 @@ import {
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 import SearchComponent from '../SearchComponent';
-import {URL_API} from '../utils/api-url';
+import {URL_API, URL} from '../utils/api-url';
 
 export default function DetailsComponentComponent(props) {
   const [shops, setShops] = useState([]);
@@ -23,7 +23,7 @@ export default function DetailsComponentComponent(props) {
   const {id: idCategory} = props.route.params;
 
   useEffect(() => {
-    fetch(URL_API+'/shops/category/' + idCategory)
+    fetch(URL_API + '/shops/category/' + idCategory)
       .then(response => response.json())
       .then(json => {
         setCantShops(json.cant);
@@ -92,7 +92,7 @@ export default function DetailsComponentComponent(props) {
       <SearchComponent />
 
       <SafeAreaView style={styles.contentShops}>
-      <View style={styles.headerTitle}>
+        <View style={styles.headerTitle}>
           <FontAwesome5Icon name={'list'} color="black" />
           <Text style={styles.subtitles}>Tiendas recomendadas</Text>
         </View>
@@ -113,9 +113,13 @@ export default function DetailsComponentComponent(props) {
                 }>
                 <Image
                   style={styles.itemShopImage}
-                  source={require('../../assets/images/more3.jpg')}
+                  source={
+                    item.photo === null || item.photo === undefined || item.photo === ''
+                      ? require('../../assets/images/delivery.jpeg')
+                      : {uri: `${URL}${item.photo}`}
+                  }
                 />
-                <View style={{marginLeft: 10,}}>
+                <View style={{marginLeft: 10}}>
                   <Text style={styles.itemShopTitle}>{item.name}</Text>
                   <Text>
                     Entrega aprox: {item.time_number}-{item.time_type}
@@ -147,7 +151,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginBottom: 20,
-  },  
+  },
   categoryContent: {
     flexDirection: 'row',
     height: 66,
@@ -181,7 +185,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 10,
   },
-  itemShop: {    
+  itemShop: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
@@ -193,7 +197,7 @@ const styles = StyleSheet.create({
   },
   itemShopImage: {width: 70, height: 70, borderRadius: 10, marginRight: 6},
   itemShopTitle: {
-    marginBottom: 10, 
+    marginBottom: 10,
     fontWeight: 'bold',
   },
 });

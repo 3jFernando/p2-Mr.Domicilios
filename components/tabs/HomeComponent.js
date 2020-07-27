@@ -11,6 +11,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 // componentes
 import SearchComponent from '../SearchComponent';
+import AdvertisingData from '../tabs/advertising/AdvertisingData';
 
 // categorias
 import CATEGORYS from '../utils/categorys_shops.json';
@@ -65,20 +66,7 @@ export default class HomeComponent extends Component {
                 <Text style={styles.contentMoreTitle}>
                   Descuentos. ¡Imperdibles!
                 </Text>
-                <ScrollView horizontal style={styles.contentMoreContentImage}>
-                  <Image
-                    style={styles.contentMoreImage}
-                    source={require('../../assets/images/more3.jpg')}
-                  />
-                  <Image
-                    style={styles.contentMoreImage}
-                    source={require('../../assets/images/more3.jpg')}
-                  />
-                  <Image
-                    style={styles.contentMoreImage}
-                    source={require('../../assets/images/more3.jpg')}
-                  />
-                </ScrollView>
+                <AdvertisingData view={true} navigation={this.props.navigation} />                
               </View>
             </View>
           </ScrollView>
@@ -91,7 +79,7 @@ export default class HomeComponent extends Component {
 
 const styles = StyleSheet.create({
   content: {
-    flex: 1,
+    flex: 1,    
     backgroundColor: 'white',
   },
   scroll: {
@@ -107,8 +95,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: 'white',
-    padding: 1,
+    backgroundColor: 'white',    
     borderRadius: 10,
   },
   contentCategoryItem: {
@@ -143,11 +130,14 @@ const styles = StyleSheet.create({
   },
   contentMore: {
     marginTop: 20,
+    padding: 0,
   },
   contentMoreTitle: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 20,
+    backgroundColor: '#F8F8F8',
+    padding: 10,
   },
   contentMoreContentImage: {
     marginTop: 10,

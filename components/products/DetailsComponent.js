@@ -35,14 +35,25 @@ export default function DetailsComponent(props) {
       <View style={styles.main1}>
         <Image
           style={styles.imageBackground}
-          source={{uri: `${URL}${product.image}`}}
+          source={
+            product.image === null || product.image === ''
+              ? require('../../assets/images/delivery.jpeg')
+              : {uri: `${URL}${product.image}`}
+          }
         />
         <Text style={styles.namePrice}>Precio</Text>
         <Text style={styles.price}>{FORMAT_CURRENCEY(product.price)}</Text>
       </View>
 
       <View style={styles.main2}>
-        <Image style={styles.image} source={{uri: `${URL}${product.image}`}} />
+        <Image
+          style={styles.image}
+          source={
+            product.image === null || product.image === ''
+              ? require('../../assets/images/delivery.jpeg')
+              : {uri: `${URL}${product.image}`}
+          }
+        />
         <TouchableOpacity
           style={styles.ItemStar}
           onPress={() => addToFavorite(client._id, 'Producto', product._id)}>

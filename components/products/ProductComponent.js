@@ -37,7 +37,11 @@ export default function ProductComponent(props) {
           }>
           <Image
             style={styles.itemImage}
-            source={{uri: `${URL}${product.image}`}}
+            source={
+              product.image === null || product.image === ''
+                ? require('../../assets/images/delivery.jpeg')
+                : {uri: `${URL}${product.image}`}
+            }
           />
         </TouchableOpacity>
         <View style={{marginLeft: 10}}>

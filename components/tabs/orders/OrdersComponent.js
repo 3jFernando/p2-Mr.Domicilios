@@ -13,10 +13,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Axios from 'axios';
 
 // componentes
-import TabsComponent from './TabsComponent';
+import TabsComponent from '../TabsComponent';
 
-import FORMAT_CURRENCEY from '../utils/format_cash';
-import {URL_API} from '../utils/api-url';
+import FORMAT_CURRENCEY from '../../utils/format_cash';
+import {URL, URL_API} from '../../utils/api-url';
 
 export default function OrdersComponent(props) {
   const [loading, setLoading] = useState(true);
@@ -27,9 +27,7 @@ export default function OrdersComponent(props) {
       const clientSession = await AsyncStorage.getItem('client-session');
       if (clientSession !== null) {
         const _client = JSON.parse(clientSession)._id;
-        await Axios.get(
-          URL_API+'/orders/clients/' + _client,
-        )
+        await Axios.get(`${URL_API}/orders/clients/${_client}`)
           .then(response => {
             const data = response.data.orders;
             setOrders(data);
@@ -52,13 +50,20 @@ export default function OrdersComponent(props) {
               orders.map(order => (
                 <TouchableOpacity
                   style={styles.contentItem}
+                  key={order._id}
                   onPress={() =>
                     props.navigation.navigate('DetailsOrder', {
                       order,
                     })
                   }>
                   <Image
-                    source={require('../../assets/images/more3.jpg')}
+                    source={
+                      order.shop === null ||
+                      order.shop === undefined ||
+                      order.shop === ''
+                        ? require('../../../assets/images/delivery.jpeg')
+                        : {uri: `${URL}${order.shop.photo}`}
+                    }
                     style={{width: 80, height: 80, borderRadius: 10}}
                   />
                   <View style={{marginLeft: 10}}>

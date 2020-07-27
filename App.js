@@ -21,8 +21,8 @@ import LoginComponent from './components/auht/LoginComponent';
 import CreateAccountComponent from './components/auht/CreateAccountComponent';
 import HomeComponent from './components/tabs/HomeComponent';
 import MapComponent from './components/tabs/MapComponent';
-import PromsComponent from './components/tabs/PromsComponent';
-import OrdersComponent from './components/tabs/OrdersComponent';
+import PromsComponent from './components/tabs/advertising/PromsComponent';
+import OrdersComponent from './components/tabs/orders/OrdersComponent';
 import FavoriteComponent from './components/tabs/favorites/FavoriteComponent';
 import AllComponent from './components/categorys_shops/AllComponent';
 import DetailsComponent from './components/categorys_shops/DetailsComponent';
@@ -30,8 +30,8 @@ import ShopsDetailsComponent from './components/shops/DetailsComponent';
 import CartShopComponent from './components/tabs/CartShopComponent';
 import DetailsProductComponent from './components/products/DetailsComponent';
 import AccountComponent from './components/client/AccountComponent';
-import CreateOrderComponent from './components/orders/CreateComponent';
-import DetailsOrderComponent from './components/orders/DetailsOrderComponent';
+import CreateOrderComponent from './components/tabs/orders/CreateComponent';
+import DetailsOrderComponent from './components/tabs/orders/DetailsOrderComponent';
 // fuentes de iconos
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -118,7 +118,7 @@ export default function App(props) {
           component={MapComponent}
         />
         <Stack.Screen
-          name="Proms"
+          name="Promotions"
           options={{
             title: 'Promociones',
             headerRight: () => <Cart />,

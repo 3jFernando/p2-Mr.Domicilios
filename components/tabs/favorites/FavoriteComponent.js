@@ -5,7 +5,6 @@ import {
   ScrollView,
   View,
   Text,
-  ActivityIndicator,
   TouchableOpacity,
   Image,
 } from 'react-native';
@@ -14,6 +13,7 @@ import TabsComponent from '../TabsComponent';
 import AsyncStorage from '@react-native-community/async-storage';
 import Axios from 'axios';
 import {URL_API, URL} from '../../utils/api-url';
+import Loading from '../../utils/loading';
 
 export default function FavoriteComponent(props) {
   const [loading, setLoading] = useState(false);
@@ -45,9 +45,7 @@ export default function FavoriteComponent(props) {
         <ScrollView>
           <View style={styles.main}>
             {loading ? (
-              <View style={{alignItems: 'center', marginTop: 20}}>
-                <ActivityIndicator size="large" color="#29d45d" />
-              </View>
+              <Loading />
             ) : (
               favorites.map(favorite => (
                 <TouchableOpacity

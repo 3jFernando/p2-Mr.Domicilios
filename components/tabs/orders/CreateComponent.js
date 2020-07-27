@@ -11,11 +11,11 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import FORMAT_CURRENCEY from '../utils/format_cash';
+import FORMAT_CURRENCEY from '../../utils/format_cash';
 import Axios from 'axios';
 import socketIOClient from 'socket.io-client';
-
-import {URL, URL_API} from '../utils/api-url';
+import {showToast} from '../../utils/toast-android';
+import {URL, URL_API} from '../../utils/api-url';
 
 export default function CreateComponent(props) {
   const [shops, setShops] = useState([]);
@@ -37,7 +37,7 @@ export default function CreateComponent(props) {
       // cliente
       const client = await AsyncStorage.getItem('client-session');
       if (client === null) {
-        alert(
+        showToast(
           'Debes volver a iniciar tu sesion para continuar, disculpa las molestias!',
         );
         props.navigation.navigate('Login');
@@ -52,7 +52,7 @@ export default function CreateComponent(props) {
       const shops_ = [];
       const shopsSearch = await AsyncStorage.getItem('cart-shop');
       if (shopsSearch === null) {
-        alert(
+        showToast(
           'Tu carrito de compras esta presentando problemas, por favor vacialo y vuelve a interlo.',
         );
         return false;
@@ -67,6 +67,7 @@ export default function CreateComponent(props) {
             name: item.shop.name,
             _id: item.shop._id,
             total: item.total,
+            photo: item.shop.photo,
             value_delivery: item.shop.value_delivery,
           }),
         );
@@ -117,22 +118,19 @@ export default function CreateComponent(props) {
       data: data,
     })
       .then(response => {
-
         const orders = response.data.orders;
-        console.log(orders);
 
         orders.map(item => {
           socket.emit('new-order-connected', item.shop_id);
           socket.emit('new-order', item.shop_id, item);
         });
-
-        alert('Orden generada con exito!');
         clearCartShop();
         props.navigation.navigate('Orders');
+        showToast('Orden generada con exito!');
       })
       .catch(e => {
         console.log(e);
-        alert(
+        showToast(
           'No es posible realizar la accion en este momento, asegurate de estar conectado a Internet.',
         );
       })
@@ -186,7 +184,13 @@ export default function CreateComponent(props) {
               <TouchableOpacity key={shop._id} style={styles.shopsItem}>
                 <Image
                   style={styles.shopsImage}
-                  source={require('../../assets/images/more3.jpg')}
+                  source={
+                    shop.photo === null ||
+                    shop.photo === undefined ||
+                    shop.photo === ''
+                      ? require('../../../assets/images/delivery.jpeg')
+                      : {uri: `${URL}${shop.photo}`}
+                  }
                 />
                 <Text style={styles.shopsName}>{shop.name}</Text>
               </TouchableOpacity>
