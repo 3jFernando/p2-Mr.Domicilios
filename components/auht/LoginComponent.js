@@ -11,27 +11,33 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
+import {showToast} from '../utils/toast-android';
+import Loading from '../utils/loading';
 import {URL_API} from '../utils/api-url';
 
 export default function LoginComponent(props) {
+  const [loading, setLoading] = useState(false);
   const [titleLogin, setTitleLogin] = useState('Iniciar sesion');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
     const validSession = async () => {
+      setLoading(true);
       const clientSession = await AsyncStorage.getItem('client-session');
       if (clientSession !== null) {
-        props.navigation.navigate('Home');
+        props.navigation.navigate('Map');
       }
+      setLoading(false);
     };
     validSession();
   }, [props.navigation]);
 
   async function login() {
     setTitleLogin('Ingresando ...');
+    setLoading(true);
     await axios
-      .post('http://192.168.88.103:5000/api/clients/login', {
+      .post(`${URL_API}/clients/login`, {
         email: email,
         password: password,
       })
@@ -41,25 +47,29 @@ export default function LoginComponent(props) {
         const message = res.message;
 
         if (status === 460) {
-          alert(message);
+          showToast(message);
         } else if (status === 470) {
-          alert(message);
+          showToast(message);
         } else if (status === 200) {
-          AsyncStorage.setItem('client-session', JSON.stringify(res.client));
-          props.navigation.navigate('Home');
+          AsyncStorage.setItem('client-session', JSON.stringify(res.client));          
+          props.navigation.navigate('Map');
         }
       })
       // error
       .catch(e => {
-        console.log('e ', e);
-        alert('Upps, ocurrio un error al tratar de realizar la accion.');
+        console.log(e);
+        showToast('Upps, ocurrio un error al tratar de realizar la accion.');
       })
-      .then(() => setTitleLogin('Iniciar sesion')); // terminado
+      .then(() => {
+        setTitleLogin('Iniciar sesion');
+        setLoading(false);
+      }); // terminado
   }
 
   return (
     <SafeAreaView style={styles.scroll}>
       <ScrollView style={styles.scrollContent}>
+        {loading && <Loading />}
         <View style={styles.main}>
           <TextInput
             keyboardType="email-address"

@@ -14,11 +14,12 @@ import Axios from 'axios';
 import FORMAT_CURRENCEY from '../../utils/format_cash';
 import {URL, URL_API} from '../../utils/api-url';
 import {showToast} from '../../utils/toast-android';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function DetailsOrderComponent(props) {
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState(null);
+  const [stateOrder, setStateOrder] = useState(null);
 
   useEffect(() => {
     if (props.shop !== null) {
@@ -30,6 +31,7 @@ export default function DetailsOrderComponent(props) {
           .then(response => {
             if (response.data.status === 200) {
               setOrder(response.data.order);
+              setStateOrder(order.state);
             } else {
               showToast(
                 'Algo salio mal al trartar de realizar la accion, intentalo mas tarde.',
@@ -41,7 +43,28 @@ export default function DetailsOrderComponent(props) {
       };
       load();
     }
-  }, [props.route.params.order._id, props.shop]);
+  }, [order.state, props.route.params.order._id, props.shop]);
+
+  // cancelar la orden
+  const cancelOrden = async order => {
+    await Axios.put(`${URL_API}/orders/cancel/`, {id: order._id})
+      .then(response => {
+        if (response.data.status === 200) {
+          showToast('Orden cancelada');
+          setStateOrder('Cancelada');
+        } else if (response.data.status === 460) {
+          showToast(
+            'La orden esta presentando problemas, intentalo mas tarde.',
+          );
+        } else {
+          showToast(
+            'Algo salio mal al trartar de realizar la accion, intentalo mas tarde.',
+          );
+        }
+      })
+      .catch(e => showToast('No es posible realizar la accion en este momento'))
+      .finally(() => setLoading(false));
+  };
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -81,7 +104,16 @@ export default function DetailsOrderComponent(props) {
                   Entrega aprox: {order.shop.time_number}-{order.shop.time_type}
                 </Text>
                 <Text style={styles.description}>
-                  Estado de la orden: {order.state}
+                  Estado de la orden:{' '}
+                  <Text
+                    style={
+                      ({fontWeight: 'bold'},
+                      stateOrder === 'Cancelada'
+                        ? {color: 'red'}
+                        : {color: '#29d45d'})
+                    }>
+                    {stateOrder}
+                  </Text>
                 </Text>
                 <Text style={styles.description}>
                   Valor domicilio: {FORMAT_CURRENCEY(order.value_delivery)}
@@ -89,19 +121,12 @@ export default function DetailsOrderComponent(props) {
                 <Text style={styles.description}>
                   Valor Total: {FORMAT_CURRENCEY(order.total)}
                 </Text>
-                <SafeAreaView style={{flex: 1,margingTop: 20, paddingTop: 20,}}>
+                <SafeAreaView style={{flex: 1, margingTop: 20, paddingTop: 20}}>
                   <ScrollView>
                     {order.products.map(product => (
-                      <View
-                        key={product._id}
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginBottom: 5,
-                          marginTop: 5,
-                        }}>
+                      <View key={product._id} style={styles.item}>
                         <Image
-                          style={{width: 30, height: 30, borderRadius: 6}}
+                          style={{width: 50, height: 50, borderRadius: 50}}
                           source={{uri: `${URL}${product.product.image}`}}
                         />
                         <View style={{marginLeft: 10}}>
@@ -114,6 +139,18 @@ export default function DetailsOrderComponent(props) {
                         </View>
                       </View>
                     ))}
+                    <TouchableOpacity
+                      style={
+                        (styles.btnCancel,
+                        stateOrder === 'Cancelada'
+                          ? {display: 'none'}
+                          : {display: 'flex'})
+                      }
+                      onPress={() => cancelOrden(order)}>
+                      <Text style={{color: 'red', fontWeight: 'bold'}}>
+                        Cancelar orden
+                      </Text>
+                    </TouchableOpacity>
                   </ScrollView>
                 </SafeAreaView>
               </View>
@@ -129,7 +166,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
-    backgroundColor: '#FFFFFF',    
+    backgroundColor: '#FFFFFF',
   },
   main1: {
     flex: 0.7,
@@ -169,5 +206,22 @@ const styles = StyleSheet.create({
     right: 30,
     top: -70,
     borderRadius: 10,
+  },
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+    marginTop: 5,
+    paddingRight: 10,
+    paddingLeft: 10,
+  },
+  btnCancel: {
+    padding: 10,
+    backgroundColor: '#F8F8F8',
+    width: '100%',
+    margin: 20,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

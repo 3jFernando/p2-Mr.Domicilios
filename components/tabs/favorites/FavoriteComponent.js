@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Axios from 'axios';
 import {URL_API, URL} from '../../utils/api-url';
 import Loading from '../../utils/loading';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function FavoriteComponent(props) {
   const [loading, setLoading] = useState(false);
@@ -44,13 +45,17 @@ export default function FavoriteComponent(props) {
       <SafeAreaView style={styles.scroll}>
         <ScrollView>
           <View style={styles.main}>
+          <View style={styles.headerList}>
+              <Text>Productos Favoritos</Text>
+              <FontAwesome5Icon name={'list'} color='#29d45d' size={15} />
+            </View>
             {loading ? (
               <Loading />
             ) : (
               favorites.map(favorite => (
                 <TouchableOpacity
                   key={favorite._id}
-                  style={{marginBottom: 15}}
+                  style={{marginBottom: 5, paddingBottom: 6, borderBottomWidth: 1, borderBottomColor: '#F8F8F8'}}
                   onPress={() =>
                     props.navigation.navigate('DetailsProduct', {
                       name: favorite.entity.name,
@@ -64,14 +69,14 @@ export default function FavoriteComponent(props) {
                       alignItems: 'center',
                     }}>
                     <Image
-                      style={{width: 50, height: 50, borderRadius: 50}}
+                      style={{width: 30, height: 30, borderRadius: 50}}
                       source={{uri: `${URL}${favorite.entity.image}`}}
                     />
                     <View style={{marginLeft: 10}}>
-                      <Text style={{fontWeight: 'bold'}}>
+                      <Text>
                         {favorite.entity.name}
                       </Text>
-                      <Text style={{fontWeight: 'bold', color: 'gray'}}>
+                      <Text style={{color: 'gray'}}>
                         {favorite.type}
                       </Text>
                     </View>
@@ -79,6 +84,10 @@ export default function FavoriteComponent(props) {
                 </TouchableOpacity>
               ))
             )}
+            <View style={styles.headerList}>
+              <Text>Tiendas Guardadas</Text>
+              <FontAwesome5Icon name={'list'} color='#29d45d' size={15} />
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -98,5 +107,12 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     padding: 20,
+  },
+  headerList: {
+    marginBottom: 20,
+    marginTop: 10,
+    flexDirection:'row', 
+    justifyContent: 'space-between', 
+    borderBottomColor: '#F8F8F8',
   },
 });

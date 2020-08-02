@@ -20,11 +20,10 @@ import StartComponent from './components/StartComponent';
 import LoginComponent from './components/auht/LoginComponent';
 import CreateAccountComponent from './components/auht/CreateAccountComponent';
 import HomeComponent from './components/tabs/HomeComponent';
-import MapComponent from './components/tabs/MapComponent';
+import MapComponent from './components/tabs/map/MapComponent';
 import PromsComponent from './components/tabs/advertising/PromsComponent';
 import OrdersComponent from './components/tabs/orders/OrdersComponent';
 import FavoriteComponent from './components/tabs/favorites/FavoriteComponent';
-import AllComponent from './components/categorys_shops/AllComponent';
 import DetailsComponent from './components/categorys_shops/DetailsComponent';
 import ShopsDetailsComponent from './components/shops/DetailsComponent';
 import CartShopComponent from './components/tabs/CartShopComponent';
@@ -87,6 +86,8 @@ export default function App(props) {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
+          headerLeft: null,
+          gesturesEnabled: false,
         }}>
         <Stack.Screen
           name="Welcome"
@@ -103,20 +104,26 @@ export default function App(props) {
           options={{title: 'Crear cuenta'}}
           component={CreateAccountComponent}
         />
-        <Stack.Screen
-          name="Home"
+         <Stack.Screen
+          name="Map"
           options={{
-            title: 'Mr. Domicilios',
+            title: 'Buscar tiendas',
             headerLeft: () => <Account />,
             headerRight: () => <Cart />,
           }}
-          component={HomeComponent}
-        />
-        <Stack.Screen
-          name="Map"
-          options={{title: 'Mapa'}}
           component={MapComponent}
-        />
+          screenOptions={{
+            headerLeft: null,
+            gesturesEnabled: false,
+          }}
+          />
+        <Stack.Screen
+          name="Home"
+          options={{
+            title: 'Explorar tiendas',            
+          }}
+          component={HomeComponent}
+        />       
         <Stack.Screen
           name="Promotions"
           options={{
@@ -145,11 +152,6 @@ export default function App(props) {
             headerRight: () => <Cart />,
           })}
           component={DetailsComponent}
-        />
-        <Stack.Screen
-          name="AllCategoryShop"
-          options={{title: 'Todas las categorias'}}
-          component={AllComponent}
         />
         <Stack.Screen
           name="DetailsShop"
@@ -186,7 +188,7 @@ export default function App(props) {
           options={{title: 'Detalles de la orden'}}
           component={DetailsOrderComponent}
         />
-      </Stack.Navigator>
+      </Stack.Navigator>          
     </NavigationContainer>
   );
 }

@@ -8,7 +8,7 @@ export default function StartComponent(props) {
     const validSession = async () => {
       const clientSession = await AsyncStorage.getItem('client-session');
       if (clientSession !== null) {
-        props.navigation.navigate('Home');
+        props.navigation.navigate('Map');
       }
     };
     validSession();
